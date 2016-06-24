@@ -231,6 +231,33 @@ class GitHubPlugin(IssuePlugin):
         json_resp = json.loads(body)
         return json_resp['title']
 
+    def get_issue_extras(self, request, group, issue_id):
+        url = '%s/%s' % (self.build_api_url(group, 'issues'), issue_id)
+        try:
+            req = self.make_api_request(request, url)
+            body = safe_urlread(req)
+        except requests.RequestException as e:
+            msg = unicode(e)
+            return {
+                'error': _('Error communicating with GitHub: %s') % (msg,),
+                'label': 'GH',
+            }
+
+        try:
+            json_resp = json.loads(body)
+        except ValueError as e:
+            msg = unicode(e)
+            return {
+                'error': _('Error communicating with GitHub: %s') % (msg,),
+                'label': 'GH',
+            }
+
+        return {
+            'assignee': json_resp.get('assignee') and json_resp.get('assignee')['login'],
+            'status': json_resp['state'],
+            'label': 'GH'
+        }
+
     def view(self, request, group, **kwargs):
         if request.GET.get('autocomplete_query'):
             query = request.GET.get('q')
