@@ -11,13 +11,14 @@ from django import forms
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from sentry.plugins.base import JSONResponse
+
 from sentry.plugins.bases.issue import IssuePlugin, NewIssueForm
 from sentry.http import safe_urlopen, safe_urlread
 from sentry.utils import json
 from sentry.utils.http import absolute_uri
 
 import sentry_github
+from .utils import JSONResponse
 
 
 class GitHubOptionsForm(forms.Form):
@@ -226,14 +227,14 @@ class GitHubPlugin(IssuePlugin):
             except requests.RequestException as e:
                 msg = unicode(e)
                 self.handle_api_error(request, msg)
-                return JSONResponse({}, status_code=502)
+                return JSONResponse({}, status=502)
 
             try:
                 json_resp = json.loads(body)
             except ValueError as e:
                 msg = unicode(e)
                 self.handle_api_error(request, msg)
-                return JSONResponse({}, status_code=502)
+                return JSONResponse({}, status=502)
 
             issues = [{
                 'text': '(#%s) %s' % (i['number'], i['title']),
