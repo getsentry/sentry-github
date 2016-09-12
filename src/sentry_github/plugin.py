@@ -52,7 +52,7 @@ class GitHubExistingIssueForm(forms.Form):
 
 class GitHubPlugin(IssuePlugin):
     author = 'Sentry Team'
-    author_url = 'https://github.com/getsentry/sentry'
+    author_url = 'https://github.com/getsentry/sentry-github'
     version = sentry_github.VERSION
     new_issue_form = GitHubNewIssueForm
     link_issue_form = GitHubExistingIssueForm
