@@ -1,6 +1,8 @@
 sentry-github
 =============
 
+**DEPRECATED:** This project now lives in `sentry-plugins <https://github.com/getsentry/sentry-plugins>`_
+
 An extension for Sentry which integrates with GitHub. Specifically, it allows you to easily create
 issues from events within Sentry.
 
